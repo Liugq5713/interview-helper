@@ -1,47 +1,84 @@
-import React, { useState, useEffect } from 'react';
 
+import React from 'react';
 
-function Foo() {
-  const [recorder, setRecorder] = useState()
-  const [btnText, setBtnText] = useState('点我录制')
-  const requestAudioAccess = () => {
-    navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(stream => {
-      setRecorder(new window.MediaRecorder(stream))
-      // this.bindEvents();
-      setTimeout(() => {
-        console.log('recorder', recorder)
-      })
-      var video = document.querySelector('video');
-
-      // video.srcObject = recorder;
-      video.onloadedmetadata = function (e) {
-        video.play();
-      };
-    }, error => {
-      alert('出错，请确保已允许浏览器获取录音权限');
-    });
+class RecordingAPI extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      recording: false,
+      audios: [],
+    };
   }
-  useEffect(() => {
-    // Update the document title using the browser API
-    requestAudioAccess()
-  });
 
-  const onStart = () => {
-    recorder.start();
-    setBtnText('结束录制')
+  async componentDidMount() {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+    this.audio.srcObject = stream
+    this.audio.play();
+    this.mediaRecorder = new MediaRecorder(stream);
+    this.chunks = [];
+    // listen for data from media recorder
+    this.mediaRecorder.ondataavailable = e => {
+      if (e.data && e.data.size > 0) {
+        this.chunks.push(e.data);
+      }
+    };
   }
-  const onStop = () => {
-    setBtnText('点我录制')
 
-    recorder.stop();
+  startRecording(e) {
+    e.preventDefault();
+    this.chunks = [];
+    this.mediaRecorder.start(10);
+    this.setState({ recording: true });
   }
-  return (
-    <div>
 
-      <video></video>
-      <div>hello world</div>
-      <button onMouseDown={onStart} onMouseUp={onStop}>{btnText}</button>
-    </div>
-  )
+  stopRecording(e) {
+    e.preventDefault();
+    this.mediaRecorder.stop();
+    this.setState({ recording: false });
+    this.saveAudio();
+  }
+
+  saveAudio() {
+    const blob = new Blob(this.chunks, { 'type': 'audio/ogg; codecs=opus' });
+    const audios = this.state.audios.concat([blob]);
+    this.setState({ audios });
+  }
+
+  deleteAudio(audioURL) {
+    // filter out current videoURL from the list of saved videos
+    const audios = this.state.audios.filter(a => a !== audioURL);
+    this.setState({ audios });
+  }
+
+  render() {
+    const { recording, audios } = this.state;
+
+    return (
+      <div className="camera">
+        <video
+          style={{ width: 400 }}
+          ref={a => {
+            this.audio = a;
+          }}>
+          <p>Audio stream not available. </p>
+        </video>
+        <div>
+          {!recording && <button onClick={e => this.startRecording(e)}>Record</button>}
+          {recording && <button onClick={e => this.stopRecording(e)}>Stop</button>}
+        </div>
+        <div>
+          <h3>Recorded videos:</h3>
+          {audios.map((video, i) => (
+            <div key={`audio_${i}`}>
+              <video controls style={{ width: 500 }} srcObject={video} />
+              <div>
+                <button onClick={() => this.deleteAudio(video)}>Delete</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 }
-export default Foo
+export default RecordingAPI
