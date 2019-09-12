@@ -39,8 +39,10 @@ class RecordingAPI extends React.Component {
   }
 
   saveAudio() {
-    const blob = new Blob(this.chunks, { 'type': 'audio/ogg; codecs=opus' });
-    const audios = this.state.audios.concat([blob]);
+    const blob = new Blob(this.chunks, { 'type': 'video/webm' });
+    const videoStream = URL.createObjectURL(blob);
+    const audios = this.state.audios.concat([videoStream]);
+    console.log(audios, 's')
     this.setState({ audios });
   }
 
@@ -70,7 +72,7 @@ class RecordingAPI extends React.Component {
           <h3>Recorded videos:</h3>
           {audios.map((video, i) => (
             <div key={`audio_${i}`}>
-              <video controls style={{ width: 500 }} srcObject={video} />
+              <video controls style={{ width: 500 }} src={video} ></video>
               <div>
                 <button onClick={() => this.deleteAudio(video)}>Delete</button>
               </div>
