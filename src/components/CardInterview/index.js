@@ -1,7 +1,7 @@
 import React from 'react'
 const CardInterview = (props) => {
   return (
-    <div className="card">
+    <div className="card bg-warning">
       <div className="card-body">
         <h5 className="card-title">{props.title}</h5>
       </div>

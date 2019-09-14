@@ -5,6 +5,10 @@
 
 > help you interview by record
 
+## 重要
+
+目前仅在我的电脑端可以使用，不知道为啥移动端不行
+
 ## Install
 
 ```sh

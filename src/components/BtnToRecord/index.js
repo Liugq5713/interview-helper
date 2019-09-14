@@ -2,7 +2,7 @@ import React from 'react'
 
 const BtnToRecord = (props) => {
   return (
-    <div style={{ width: '100%', position: 'fixed', bottom: '10px' }}>
+    <div style={{ width: '100%', maxWidth: '750px', position: 'fixed', bottom: '10px' }}>
       <button onClick={props.handleRecord} style={{ width: '98%' }} type="button" className="btn btn-light">
         {props.recording ?
           (<div>

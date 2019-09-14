@@ -45,9 +45,9 @@ class RecordingAPI extends React.Component {
     this.saveAudio();
     setTimeout(() => {
       this.setState((state) => {
-        let cnt
+        let cnt = state.cnt
         if (state.cnt < this.state.Questions.length) {
-          cnt = state.cnt + 1
+          cnt++
         }
         return { cnt }
       })
@@ -61,11 +61,6 @@ class RecordingAPI extends React.Component {
     this.setState({ audios });
   }
 
-  deleteAudio = (audioURL) => {
-    console.log('audioURL', audioURL)
-    const audios = this.state.audios.filter(a => a !== audioURL);
-    this.setState({ audios });
-  }
 
   render() {
     const { recording, audios, cnt, Questions } = this.state;
