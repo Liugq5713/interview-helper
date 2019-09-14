@@ -26,8 +26,8 @@ class RecordingAPI extends React.Component {
     this.mediaRecorder.ondataavailable = e => {
       if (e.data && e.data.size > 0) {
         this.chunks.push(e.data);
-
       }
+
     };
   }
 
@@ -42,7 +42,7 @@ class RecordingAPI extends React.Component {
     e.preventDefault();
     this.mediaRecorder.stop();
     this.setState({ recording: false });
-    this.saveAudio();
+    this.saveVideo();
     setTimeout(() => {
       this.setState((state) => {
         let cnt = state.cnt
@@ -51,10 +51,11 @@ class RecordingAPI extends React.Component {
         }
         return { cnt }
       })
-    }, 100)
+      this.refs.interviewWrapper.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" })
+    }, 500)
   }
 
-  saveAudio = () => {
+  saveVideo = () => {
     const blob = new Blob(this.chunks, { 'type': 'video/webm' });
     const videoStream = URL.createObjectURL(blob);
     const audios = this.state.audios.concat([videoStream]);
@@ -67,7 +68,7 @@ class RecordingAPI extends React.Component {
 
     return (
       <div className="camera">
-        <div>
+        <div style={{ paddingBottom: '50px' }} ref="interviewWrapper">
           {
             [...Array(cnt)].map((video, i) => (
               <div className='px-1 py-2' key={`audio_${i}`}>
