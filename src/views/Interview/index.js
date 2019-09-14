@@ -1,5 +1,9 @@
 
 import React from 'react';
+import BtnToRecord from 'components/BtnToRecord'
+import CardInterview from 'components/CardInterview'
+import { commonQuestions } from 'constants/questions'
+
 
 class RecordingAPI extends React.Component {
   constructor(props) {
@@ -7,78 +11,80 @@ class RecordingAPI extends React.Component {
     this.state = {
       recording: false,
       audios: [],
+      chunks: [],
+      cnt: 0,
+      Questions: [...commonQuestions]
     };
   }
 
   async componentDidMount() {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
-    this.audio.srcObject = stream
-    this.audio.play();
     this.mediaRecorder = new MediaRecorder(stream);
-    this.chunks = [];
+    this.chunks = []
+    this.setState({ cnt: this.state.cnt + 1 })
     // listen for data from media recorder
     this.mediaRecorder.ondataavailable = e => {
       if (e.data && e.data.size > 0) {
         this.chunks.push(e.data);
+
       }
     };
   }
 
-  startRecording(e) {
+  startRecording = (e) => {
     e.preventDefault();
-    this.chunks = [];
+    this.chunks = []
     this.mediaRecorder.start(10);
     this.setState({ recording: true });
   }
 
-  stopRecording(e) {
+  stopRecording = (e) => {
     e.preventDefault();
     this.mediaRecorder.stop();
     this.setState({ recording: false });
     this.saveAudio();
+    setTimeout(() => {
+      this.setState((state) => {
+        let cnt
+        if (state.cnt < this.state.Questions.length) {
+          cnt = state.cnt + 1
+        }
+        return { cnt }
+      })
+    }, 100)
   }
 
-  saveAudio() {
+  saveAudio = () => {
     const blob = new Blob(this.chunks, { 'type': 'video/webm' });
     const videoStream = URL.createObjectURL(blob);
     const audios = this.state.audios.concat([videoStream]);
-    console.log(audios, 's')
     this.setState({ audios });
   }
 
-  deleteAudio(audioURL) {
-    // filter out current videoURL from the list of saved videos
+  deleteAudio = (audioURL) => {
+    console.log('audioURL', audioURL)
     const audios = this.state.audios.filter(a => a !== audioURL);
     this.setState({ audios });
   }
 
   render() {
-    const { recording, audios } = this.state;
+    const { recording, audios, cnt, Questions } = this.state;
 
     return (
       <div className="camera">
-        <video
-          style={{ width: 400 }}
-          ref={a => {
-            this.audio = a;
-          }}>
-          <p>Audio stream not available. </p>
-        </video>
         <div>
-          {!recording && <button onClick={e => this.startRecording(e)}>Record</button>}
-          {recording && <button onClick={e => this.stopRecording(e)}>Stop</button>}
-        </div>
-        <div>
-          <h3>Recorded videos:</h3>
-          {audios.map((video, i) => (
-            <div key={`audio_${i}`}>
-              <video controls style={{ width: 500 }} src={video} ></video>
-              <div>
-                <button onClick={() => this.deleteAudio(video)}>Delete</button>
+          {
+            [...Array(cnt)].map((video, i) => (
+              <div className='px-1 py-2' key={`audio_${i}`}>
+                <CardInterview title={Questions[i].q}>
+                  {audios[i] && <video controls style={{ width: '100%' }} src={audios[i]} ></video>}
+                </CardInterview>
               </div>
-            </div>
-          ))}
+            ))
+          }
         </div>
+
+        <BtnToRecord recording={recording} handleRecord={recording ? this.stopRecording : this.startRecording} onClick={e => this.startRecording(e)} />
       </div>
     );
   }

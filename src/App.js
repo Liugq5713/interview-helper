@@ -1,11 +1,12 @@
 import React from 'react';
-import Foo from './views/Foo'
+// import Foo from './views/Foo'
+import Layout from './views/Layout'
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <Foo />
+      <Layout />
     </div>
   );
 }
