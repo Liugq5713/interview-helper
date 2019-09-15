@@ -7,7 +7,7 @@
 
 ## 重要
 
-目前仅在我的电脑端可以使用，不知道为啥移动端不行
+[MediaRecorder API](https://caniuse.com/#search=MediaRecorder) 支持度不行，ios Safari 和安卓都不能使用，目前仅在我的电脑端可以使用，或者 Chrome for Android
 
 ## Install
 
