@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/interview-helper/static/css/main.d4d3ccde.chunk.css",
+    "main.js": "/interview-helper/static/js/main.d06c7963.chunk.js",
+    "main.js.map": "/interview-helper/static/js/main.d06c7963.chunk.js.map",
+    "runtime~main.js": "/interview-helper/static/js/runtime~main.5a318470.js",
+    "runtime~main.js.map": "/interview-helper/static/js/runtime~main.5a318470.js.map",
+    "static/css/2.266e55a5.chunk.css": "/interview-helper/static/css/2.266e55a5.chunk.css",
+    "static/js/2.76b2b42e.chunk.js": "/interview-helper/static/js/2.76b2b42e.chunk.js",
+    "static/js/2.76b2b42e.chunk.js.map": "/interview-helper/static/js/2.76b2b42e.chunk.js.map",
+    "index.html": "/interview-helper/index.html",
+    "precache-manifest.6172453cc10d218f035164e66ddc540c.js": "/interview-helper/precache-manifest.6172453cc10d218f035164e66ddc540c.js",
+    "service-worker.js": "/interview-helper/service-worker.js",
+    "static/css/2.266e55a5.chunk.css.map": "/interview-helper/static/css/2.266e55a5.chunk.css.map",
+    "static/css/main.d4d3ccde.chunk.css.map": "/interview-helper/static/css/main.d4d3ccde.chunk.css.map"
+  }
+}
